@@ -44,7 +44,6 @@ foreach ($usertask as $task){
 </head>
 <style>
     @import url("https://fonts.googleapis.com/css2?family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap");
-
     ::selection {
         background: #00f1;
     }
@@ -55,11 +54,11 @@ foreach ($usertask as $task){
         vertical-align: middle;
     }
 
-    body {
-        background: url("https://images.unsplash.com/photo-1701198067981-bb371b7621a7?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzE2MjI4NDd8&ixlib=rb-4.1.0&q=85"), #eff;
+body {
+        background: url("https://s34.picofile.com/file/8490306050/bg.jpg"), #eff;
         background-size: cover;
         background-repeat: no-repeat;
-        padding: 0 1rem;
+        padding: 0 .5rem;
         margin: 0;
         overflow: hidden;
         display: flex;
@@ -143,7 +142,7 @@ foreach ($usertask as $task){
     }
 
     .tasks {
-        overflow: hidden;
+        overflow:hidden auto ;
         background: #fffc;
         width: 100%;
         height: 400px;
@@ -305,11 +304,83 @@ foreach ($usertask as $task){
             transform: scale(.8);
         }
     }
+    @media screen and (max-width:1100px) {
+
+        .counters {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+        .counter {
+            width: calc(100% / 2 - 2.6rem);
+        }
+
+        .task {
+            width: calc(100% / 2 - 2.6rem);
+        }
+    }
+    @media screen and (max-width:900px) {
+        body{
+            padding:0;
+        }
+        .counter {
+            width:100%;
+        }
+
+        .task {
+            width:calc(100% - 2rem);
+        }
+
+        .dashboard {
+            min-width: 75px;
+            width: 75px;
+        }
+
+        .dashboard,
+        .tasks {
+            height: calc(100vh - .5rem);
+        }
+
+        .dashboard a span {
+            display: none;
+        }
+
+        .dashboard .profile {
+            width: 100%;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 75px;
+        }
+
+        .dashboard .full {
+            display: none;
+        }
+
+        .dashboard .low {
+            display: inline;
+        }
+
+        .dashboard h2 {
+            display: none;
+        }
+
+        .dashboard a svg {
+            margin: 0;
+        }
+
+        .dashboard a {
+            padding: .5rem 0;
+            text-align: center;
+        }
+    }
 </style>
 <div class="dashboard">
     <div class="profile">
         <div class="user_info">
-            <h1><?php echo $_SESSION["name"] . " " . $_SESSION["lastname"]; ?></h1>
+            <h1><span class="full"><?php echo $_SESSION["name"] . " " . $_SESSION["lastname"]; ?></span><span class="low"><?php echo substr($_SESSION["name"], 0, 1) . "." . substr($_SESSION["lastname"], 0, 1); ?></span></h1>
             <h2><?php echo $_SESSION["username"]; ?></h2>
         </div>
     </div>
@@ -340,6 +411,5 @@ foreach ($usertask as $task){
             button.innerHTML = "login<div class=\"loader\"></div>";
         }
     </script>
-
 
 </html>
