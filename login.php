@@ -49,7 +49,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
     }
 
     body {
-        background: url("http://localhost/phplearning/bg.jpg"), #eff;
+        background: url("https://images.unsplash.com/photo-1701198067981-bb371b7621a7?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzE2MjI4NDd8&ixlib=rb-4.1.0&q=85"), #eff;
         background-size: cover;
         background-repeat: no-repeat;
         padding: 0;
@@ -254,4 +254,5 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
         button.innerHTML = "login<div class=\"loader\"></div>";
     }
     </script>
+
 </html>
