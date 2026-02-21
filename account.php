@@ -69,7 +69,9 @@ body {
         animation: bganim forwards 1s 1s;
         background-position: center center;
     }
-
+    .low{
+        display:none;
+    }
     .dashboard {
         overflow: hidden;
         background: #fffc;
@@ -413,3 +415,4 @@ body {
     </script>
 
 </html>
+
