@@ -40,7 +40,7 @@ foreach ($usertask as $task){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
+    <title>dashboard</title>
 </head>
 <style>
     @import url("https://fonts.googleapis.com/css2?family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap");
@@ -415,4 +415,5 @@ body {
     </script>
 
 </html>
+
 
