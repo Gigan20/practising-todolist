@@ -1,27 +1,34 @@
 <?php
-sleep(2);
+$log = [];
 session_start();
-if(!isset($_SESSION["username"])){
+if (!isset($_SESSION["username"])) {
     header("location: ./login.php");
 }
-if(file_exists("usertasks.txt")){
-$data = file_get_contents("usertasks.txt");
-$data = unserialize($data);
-}else{
-    file_put_contents("usertasks.txt","");
+if (file_exists("usertasks.txt")) {
+    $data = file_get_contents("usertasks.txt");
+    $data = unserialize($data);
+    $log[] = "data received";
+} else {
+    file_put_contents("usertasks.txt", "");
+    $log[] = "file made";
 }
-if(empty($data)){
-    $data=[];
+if (empty($data)) {
+    $data = [];
+    $log[] = "\$data is empty";
 }
-if(isset($_POST["date"])||isset($_POST["status"])||isset($_POST["taskname"])||isset($_POST["progress"])){
-if(isset($_POST["date"])&&isset($_POST["status"])&&isset($_POST["taskname"])&&isset($_POST["progress"])){
-    $task=["taskname"=> $_POST["taskname"],"status"=> $_POST["status"],"progress"=> $_POST["progress"],"taskname"=> $_POST["taskname"],"date"=> $_POST["date"],"user"=> $_SESSION["username"]];
-    $data[]=$task;
-    $serialize=serialize($data);
-    file_put_contents("usertasks.txt",$serialize);
-}else{
-    $result="Please fill in all required entries.";
-}}
+if (isset($_POST["date"]) || isset($_POST["status"]) || isset($_POST["taskname"]) || isset($_POST["progress"])) {
+    $log[] = "some data sent";
+    if (!empty($_POST["date"]) && !empty($_POST["status"]) && !empty($_POST["taskname"]) && !empty($_POST["progress"])) {
+        $log[] = "all data sent";
+        $log[] = $_POST;
+        $task = ["taskname" => $_POST["taskname"], "status" => $_POST["status"], "progress" => $_POST["progress"], "taskname" => $_POST["taskname"], "date" => $_POST["date"], "user" => $_SESSION["username"]];
+        $data[] = $task;
+        $serialize = serialize($data);
+        file_put_contents("usertasks.txt", $serialize);
+    } else {
+        $result = "Please fill in all required entries.";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,11 +51,33 @@ if(isset($_POST["date"])&&isset($_POST["status"])&&isset($_POST["taskname"])&&is
         vertical-align: middle;
     }
 
+    .log {
+        color: #fff;
+        overflow: auto;
+        backdrop-filter: blur(15px);
+        background: #0009;
+        margin: .5rem;
+        padding: 1rem;
+        border-radius: 5px;
+        width: 300px;
+        font-family: monospace;
+        height: calc(400px - 2rem);
+    }
+
+    .log h1 {
+        font-size: 13px;
+        text-align: left;
+        width: 100%;
+        margin-left: -1rem;
+        margin: none;
+        padding: 0 1rem;
+    }
+
     body {
-        background: url("https://images.unsplash.com/photo-1701198067981-bb371b7621a7?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzE2MjI4NDd8&ixlib=rb-4.1.0&q=85"), #eff;
+        background: url("https://s34.picofile.com/file/8490306050/bg.jpg"), #eff;
         background-size: cover;
         background-repeat: no-repeat;
-        padding: 0 1rem;
+        padding: 0 .5rem;
         margin: 0;
         overflow: hidden;
         display: flex;
@@ -312,14 +341,14 @@ if(isset($_POST["date"])&&isset($_POST["status"])&&isset($_POST["taskname"])&&is
         margin-top: 1rem;
         display: inline-flex;
         cursor: pointer;
-        margin-bottom:1rem;
+        margin-bottom: 1rem;
     }
 
-    button:hover{
+    button:hover {
         transform: scale(1.05);
     }
 
-    button:active{
+    button:active {
         transform: scale(.95);
     }
 
@@ -328,41 +357,51 @@ if(isset($_POST["date"])&&isset($_POST["status"])&&isset($_POST["taskname"])&&is
     }
 
     .flexbox div:not(.progressbar):not(.progressedbar) {
-        width:calc(100% / 3 - .5rem);
+        width: calc(100% / 3 - 1rem);
         padding: .5rem;
         display: block;
     }
-    .loader{
-        border-radius:30px;
-        padding:0;
+
+    .loader {
+        border-radius: 30px;
+        padding: 0;
         width: 13px;
-        display:inline-block;
-        margin-left:-17px;
-        border:2px #0004 solid;
-        border-right-color:#000;
+        display: inline-block;
+        margin-left: -17px;
+        border: 2px #0004 solid;
+        border-right-color: #000;
         height: 13px;
-        opacity:0;
-        animation:loadanim  .5s forwards,rotate 1s linear infinite;
+        opacity: 0;
+        animation: loadanim .5s forwards, rotate 1s linear infinite;
     }
-    @keyframes loadanim{
-        to{opacity:1;margin-left:.3rem;}
+
+    @keyframes loadanim {
+        to {
+            opacity: 1;
+            margin-left: .3rem;
+        }
     }
-        @keyframes rotate{
-        to{transform: rotate(1turn);}
+
+    @keyframes rotate {
+        to {
+            transform: rotate(1turn);
+        }
     }
-    form{
+
+    form {
         width: 100%;
     }
-        p {
-        margin:0;
-        margin-bottom:-36px;
+
+    p {
+        margin: 0;
+        margin-bottom: -36px;
         display: inline-block;
         font-size: 14px;
         text-align: center;
         background: #f00a;
-        position:absolute;
-        top:-1rem;
-        right:1rem;
+        position: absolute;
+        top: -1rem;
+        right: 1rem;
         color: #fff;
         border-radius: 100px;
         padding: .4rem 1rem;
@@ -381,28 +420,116 @@ if(isset($_POST["date"])&&isset($_POST["status"])&&isset($_POST["taskname"])&&is
     }
 
     @keyframes erranim {
-        10%,80% {
+
+        10%,
+        80% {
             margin: 0 0 1rem 0;
             filter: blur(0);
             opacity: 1;
-            top:1rem;
+            top: 1rem;
             transform: scale(1);
         }
+
         90% {
-            margin:0;
-            top:-1rem;
-            margin-bottom:-31px;
+            margin: 0;
+            top: -1rem;
+            margin-bottom: -31px;
             filter: blur(15px);
             opacity: 0;
             transform: scale(.8);
         }
     }
 
+    .low {
+        display: none;
+    }
+
+    @media screen and (max-width:1100px) {
+
+        .flexbox {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .flexbox div:not(.progressbar):not(.progressedbar) {
+            width: calc(100% / 2 - 1rem);
+        }
+
+        label {
+            width: calc(100% / 2 - 2.6rem);
+        }
+    }
+
+    @media screen and (max-width:900px) {
+        body{
+            padding:0;
+        }
+        .flexbox {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .flexbox div:not(.progressbar):not(.progressedbar) {
+            width: calc(100% - 1rem);
+        }
+
+        label {
+            width: calc(100% - 2.6rem);
+        }
+
+        .dashboard {
+            min-width: 75px;
+            width: 75px;
+        }
+
+        .dashboard,
+        .tasks {
+            height: calc(100vh - .5rem);
+        }
+
+        .dashboard a span {
+            display: none;
+        }
+
+        .dashboard .profile {
+            width: 100%;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 75px;
+        }
+
+        .dashboard .full {
+            display: none;
+        }
+
+        .dashboard .low {
+            display: inline;
+        }
+
+        .dashboard h2 {
+            display: none;
+        }
+
+        .dashboard a svg {
+            margin: 0;
+        }
+
+        .dashboard a {
+            padding: .5rem 0;
+            text-align: center;
+        }
+    }
 </style>
+<!-- <pre class="log"><h1>log check</h1><?php print_r($log); ?></pre> -->
 <div class="dashboard">
     <div class="profile">
         <div class="user_info">
-            <h1><?php echo $_SESSION["name"] . " " . $_SESSION["lastname"]; ?></h1>
+            <h1><span class="full"><?php echo $_SESSION["name"] . " " . $_SESSION["lastname"]; ?></span><span class="low"><?php echo substr($_SESSION["name"], 0, 1) . "." . substr($_SESSION["lastname"], 0, 1); ?></span></h1>
             <h2><?php echo $_SESSION["username"]; ?></h2>
         </div>
     </div>
@@ -420,48 +547,50 @@ if(isset($_POST["date"])&&isset($_POST["status"])&&isset($_POST["taskname"])&&is
     <h1>new task</h1>
     <?php if (!empty($result)): ?><p><?php echo $result; ?></p><?php endif; ?>
     <form action="" method="post">
-    <div class="flexbox">
-        <div>
-            <legend>task name</legend>
-            <input type="text" name="taskname">
-        </div>
-        <div>
-            <legend>Progress percentage</legend>
-            <input type="number" oninput="updateProgress(this.value)" max="100" min="0" name="progress">
-            <div class="progressbar">
-                <div class="progressedbar"></div>
+        <div class="flexbox">
+            <div>
+                <legend>task name</legend>
+                <input type="text" name="taskname">
+            </div>
+            <div>
+                <legend>Progress percentage</legend>
+                <input type="number" oninput="updateProgress(this.value)" max="100" min="0" name="progress">
+                <div class="progressbar">
+                    <div class="progressedbar"></div>
+                </div>
+            </div>
+            <div>
+                <legend>task date</legend>
+                <input type="date" min="2026-01-01" name="date">
             </div>
         </div>
         <div>
-            <legend>task date</legend>
-            <input type="date" min="2026-01-01" name="date">
+            <legend>status</legend>
+            <input type="radio" id="status1" name="status" value="in_queue"><label for="status1">in queue</label>
+            <input type="radio" id="status2" name="status" value="in_progress"><label for="status2">In progress</label>
+            <input type="radio" id="status3" name="status" value="done"><label for="status3">done</label>
+            <input type="radio" id="status4" name="status" value="lost"><label for="status4">lost</label>
         </div>
-    </div>
-    <div>
-        <legend>status</legend>
-        <input type="radio" id="status1" name="status" value="in_queue"><label for="status1">in queue</label>
-        <input type="radio" id="status2" name="status" value="in_progress"><label for="status2">In progress</label>
-        <input type="radio" id="status3" name="status" value="done"><label for="status3">done</label>
-        <input type="radio" id="status4" name="status" value="lost"><label for="status4">lost</label>
-    </div>
-    <button onclick="load()">submit</button></form></div>
-    </body>
-    <script>
+        <button onclick="load()">submit</button>
+    </form>
+</div>
+</body>
+<script>
+    const bar = document.querySelector(".progressedbar");
+    bar.style.width = 0 + "%";
+
+    function load() {
+        const button = document.querySelector("button");
+        button.innerHTML = button.innerHTML + "<div class=\"loader\"></div>";
+    }
+
+    function updateProgress(value) {
+        if (value > 100) value = 100;
+        if (value < 0) value = 0;
+
         const bar = document.querySelector(".progressedbar");
-        bar.style.width = 0 + "%";
-        function load() {
-            const button = document.querySelector("button");
-            button.innerHTML = button.innerHTML + "<div class=\"loader\"></div>";
-        }
-
-        function updateProgress(value) {
-            if (value > 100) value = 100;
-            if (value < 0) value = 0;
-
-            const bar = document.querySelector(".progressedbar");
-            bar.style.width = value + "%";
-        }
-    </script>
-
+        bar.style.width = value + "%";
+    }
+</script>
 
 </html>
