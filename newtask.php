@@ -36,7 +36,7 @@ if (isset($_POST["date"]) || isset($_POST["status"]) || isset($_POST["taskname"]
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
+    <title>newtask</title>
 </head>
 <style>
     @import url("https://fonts.googleapis.com/css2?family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap");
@@ -594,3 +594,4 @@ if (isset($_POST["date"]) || isset($_POST["status"]) || isset($_POST["taskname"]
 </script>
 
 </html>
+
